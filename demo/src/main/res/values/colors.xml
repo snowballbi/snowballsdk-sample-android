@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#0D5DD7</color>
+
+
+    <color name="pro_gradient_start">#FA490F</color>
+    <color name="pro_gradient_center">#F70275</color>
+    <color name="pro_gradient_end">#E601BE</color>
+
+    <color name="text_common_color_first">#222226</color>
+    <color name="text_common_color_second">#616166</color>
+    <color name="text_common_color_second_half_transparent">#77616166</color>
+    <color name="text_common_color_third">#969699</color>
+    <color name="text_common_color_disabled">#CCCCCC</color>
+</resources>

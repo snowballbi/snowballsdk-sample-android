@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">SnowBall SDK Demo</string>
+    <string name="manage_subscription">Manage Subscription</string>
+    <string name="upgrade_to_pro">Upgrade to Pro</string>
+    <string name="license_upgraded">License Upgraded</string>
+    <string name="loading">loading…</string>
+    <string name="enjoy_premium">Enjoy Premium</string>
+    <string name="premium_desc">  1. No Ads. 2. Unlimited Functions
+    </string>
+
+
+    <string name="days_trial">%d Days Trial</string>
+    <string name="price_per_day">%s / Day</string>
+    <string name="price_per_week">%s / Week</string>
+    <string name="price_per_month">%s / Month</string>
+    <string name="price_per_year">%s / Year</string>
+    <string name="price_after_trial">Then %s</string>
+    <string name="price_each_day">%s each day</string>
+    <string name="price_each_week">%s each week</string>
+    <string name="price_each_month">%s each month</string>
+    <string name="price_each_year">%s each year</string>
+    <string name="purchase_claim_subs_with_free_trial">The subscription gives you unlimited access to the premium features. You will automatically be charged %s at the end of the trial until you cancel it. You can cancel Subscription on Google Play.</string>
+    <string name="purchase_claim_subs_without_free_trial">The subscription gives you unlimited access to the premium features. You will automatically be charged %s until you cancel it. You can cancel Subscription on Google Play.</string>
+    <string name="purchase_claim_lifetime">The one-time purchase gives you unlimited access to the above premium features. No subscriptions or more purchases are needed in the future.</string>
+
+    <string name="dialog_message_license_paused_to_resume">Your subscription has been paused, please go to Google Play to resume your subscription</string>
+    <string name="dialog_button_resume">Resume</string>
+    <string name="msg_network_error">Your network is unavailable. Please check your network connection and try again.</string>
+    <string name="restore_failed">Failed to restore license. Please try again later</string>
+    <string name="toast_no_pro_purchased">No premium license found</string>
+    <string name="license_downgraded">License Downgraded</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="load_price_error">Failed to Load Price</string>
+
+    <string name="message_license_upgraded">Congratulations, License Upgraded!</string>
+
+    <string name="pay_failed">Payment failed.</string>
+
+    <plurals name="day_number">
+        <item quantity="one">One Day</item>
+        <item quantity="other">%d Days</item>
+    </plurals>
+    <plurals name="week_number">
+        <item quantity="one">One Week</item>
+        <item quantity="other">%d Weeks</item>
+    </plurals>
+    <plurals name="month_number">
+        <item quantity="one">One Month</item>
+        <item quantity="other">%d Months</item>
+    </plurals>
+    <plurals name="year_number">
+        <item quantity="one">One Year</item>
+        <item quantity="other">%d Years</item>
+    </plurals>
+    <plurals name="every_day_number">
+        <item quantity="one">Every Day</item>
+        <item quantity="other">Every %d Days</item>
+    </plurals>
+    <plurals name="every_week_number">
+        <item quantity="one">Every Week</item>
+        <item quantity="other">Every %d Weeks</item>
+    </plurals>
+    <plurals name="every_month_number">
+        <item quantity="one">Every Month</item>
+        <item quantity="other">Every %d Months</item>
+    </plurals>
+    <plurals name="every_year_number">
+        <item quantity="one">Every Year</item>
+        <item quantity="other">Every %d Years</item>
+    </plurals>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
+    <string name="lifetime">Lifetime</string>
+    <string name="expire_time">Expire date: %s</string>
+    <string name="subscription">Subscription</string>
+    <string name="try_for_free">Try for Free</string>
+    <string name="try_for_free_tips">Try it for free for %1$s days \n %2$s after trial ends</string>
+    <string name="restore_purchase">Restore Purchase</string>
+
+</resources>

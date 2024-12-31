@@ -1,0 +1,32 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    alias(libs.plugins.androidApplication) apply false
+
+    // Add the dependency for the Google services Gradle plugin
+    id("com.google.gms.google-services") version "4.4.1" apply false
+    alias(libs.plugins.androidLibrary) apply false
+
+}
+
+
+// Define versions in a single place
+ext {
+    // Sdk and tools
+    minSdkVersion = 24
+    targetSdkVersion = 33
+    compileSdkVersion = 34
+
+    // Firebase
+    firebaseBomVersion = '32.7.2'
+
+    // Ads Mediation
+    admobVersion = '22.6.0'
+
+    installReferrerVersion = '2.2'
+
+    playServicesAdsIdentifierVersion = "18.1.0"
+
+    eventBusVersion = '3.3.1'
+    okHttpBomVersion = '3.12.1'
+
+}

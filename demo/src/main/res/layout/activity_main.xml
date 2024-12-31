@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.snowball.sdkdemo.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="50dp"
+        android:textSize="16sp"
+        android:text="SnowBall SDK Demo" />
+
+    <Button
+        android:id="@+id/btn_show_ads"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="60dp"
+        android:text="Show Ads" />
+
+    <Button
+        android:id="@+id/btn_copy_push_token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="60dp"
+        android:text="Copy PushToken" />
+
+    <Button
+        android:id="@+id/btn_open_purchase_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="60dp"
+        android:text="Open Purchase Page" />
+
+    <Button
+        android:id="@+id/btn_consume_lifetime_purchase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="60dp"
+        android:text="Consume Lifetime Purchase" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/vUserPushToken"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="50dp"
+            android:textSize="16sp"
+            android:text="User PushToken: " />
+
+        <TextView
+            android:id="@+id/textUserPushToken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="60dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
