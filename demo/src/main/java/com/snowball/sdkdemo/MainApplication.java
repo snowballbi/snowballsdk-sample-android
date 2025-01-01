@@ -6,7 +6,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.adjust.sdk.Adjust;
-import com.adjust.sdk.AdjustAttribution;
 import com.adjust.sdk.AdjustConfig;
 import com.snowball.common.AppContext;
 import com.snowball.common.SnowBallLog;
@@ -30,14 +29,12 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppContext.set(this);
+        AppContext.set(this); // Used in snowball sdk. Must be called.
 
         initSnowBallTracker();
-        initSnowBallLicense();
+        initSnowBallLicense(); // optional
         initSnowBallPush();
-
-        //setup adjust callback after the Firebase init completed, then send the attribute info
-//        reportAttributeFromAdjust();
+        reportAttributeFromAdjust(); // optional
     }
 
     private void initSnowBallTracker() {
@@ -87,27 +84,24 @@ public class MainApplication extends Application {
     }
 
     private void reportAttributeFromAdjust() {
-        String appToken = "demotest";
+        String appToken = "your_app_token_for_adjust";
         AdjustConfig config = new AdjustConfig(this, appToken, AdjustConfig.ENVIRONMENT_PRODUCTION);
-        config.setOnAttributionChangedListener(this::reportAdjustAttribution);
+        config.setOnAttributionChangedListener(attribution -> {
+            AttributionInfo attributionInfo = new AttributionInfo(AttributionSource.Adjust,
+                    attribution.trackerToken,
+                    attribution.trackerName,
+                    attribution.network,
+                    attribution.campaign,
+                    attribution.adgroup,
+                    attribution.creative,
+                    attribution.clickLabel,
+                    attribution.costType,
+                    attribution.costAmount,
+                    attribution.costCurrency
+            );
+
+            SnowBallTracker.getInstance().reportAttributionInfo(MainApplication.this, attributionInfo);
+        });
         Adjust.initSdk(config);
-    }
-
-    private void reportAdjustAttribution(AdjustAttribution attribution) {
-        AttributionInfo attributionInfo = new AttributionInfo(AttributionSource.Adjust,
-                attribution.trackerToken,
-                attribution.trackerName,
-                attribution.network,
-                attribution.campaign,
-                attribution.adgroup,
-                attribution.creative,
-                attribution.clickLabel,
-                attribution.costType,
-                attribution.costAmount,
-                attribution.costCurrency
-        );
-
-        SnowBallTracker.getInstance().reportAttributionInfo(this, attributionInfo);
-
     }
 }

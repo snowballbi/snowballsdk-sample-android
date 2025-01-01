@@ -22,21 +22,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 
 class AdmobILRDReportHelper {
 
     private static final SnowBallLog gDebug = SnowBallLog.createCommonLogger("AdmobILRDReportHelper");
 
+    /** @noinspection SameParameterValue*/
     static void reportAdsEvent(Context context, AdType adType, String adUnitId,
-                              ResponseInfo responseInfo, @NonNull AdValue adValue, @NonNull String scene) {
+                               ResponseInfo responseInfo, @NonNull AdValue adValue, @NonNull String scene) {
         gDebug.d("==> reportILRD, adType: " + adType + ", adUnitId: " + adUnitId);
-
-        String adapterCredentials = null;
-        if (responseInfo != null) {
-            adapterCredentials = getAdapterCredentials(responseInfo);
-        }
 
         final String networkName = getNetworkName(responseInfo);
 
@@ -52,8 +47,7 @@ class AdmobILRDReportHelper {
                 adValue.getCurrencyCode(),
                 adValue.getValueMicros() * 1.0 / 100_0000,
                 getRevenuePrecisionName(adValue.getPrecisionType()),
-                scene,
-                adapterCredentials
+                scene
         );
 
         SnowBallTracker.getInstance().trackAdRevenue(context, ilrdInfo);
@@ -84,24 +78,6 @@ class AdmobILRDReportHelper {
             return region.toUpperCase();
         }
         return null;
-    }
-
-    private static String getAdapterCredentials(@NonNull ResponseInfo responseInfo) {
-        AdapterResponseInfo adapterResponseInfo = responseInfo.getLoadedAdapterResponseInfo();
-        if (adapterResponseInfo == null) {
-            return null;
-        }
-        JSONObject jsonObject = new JSONObject();
-        Bundle bundle = adapterResponseInfo.getCredentials();
-        try {
-            for (String key : bundle.keySet()) {
-                jsonObject.put(key, Objects.requireNonNull(bundle.get(key)).toString());
-            }
-            return jsonObject.toString();
-        } catch (JSONException e) {
-            gDebug.e(e);
-            return null;
-        }
     }
 
     @Nullable
