@@ -53,15 +53,16 @@
             android:id="@+id/rv_upgrade_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/ll_bottom"
+            android:layout_above="@id/ll_bottom_buttons"
             android:layout_gravity="center" />
 
         <LinearLayout
-            android:id="@+id/ll_bottom"
+            android:id="@+id/ll_bottom_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_free_trail_tips"

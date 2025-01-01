@@ -57,7 +57,8 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
     private Sku mSelectedSku;
     private TextView mPurchasedLicenseTypeTv;
     private TextView mPurchasedExpireDateTv;
-    protected View mLoadingPriceView;
+    private View mLoadingPriceView;
+    private View mButtonContainer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +92,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
 
         mPurchasedLicenseTypeTv = findViewById(R.id.tv_license_type);
         mPurchasedExpireDateTv = findViewById(R.id.tv_expire_date);
+        mButtonContainer = findViewById(R.id.ll_bottom_buttons);
 
         mSkuListAdapter = new SkuListAdapter(this, (position, sku) -> {
             mSelectedSku = sku;
@@ -114,6 +116,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
         mManageSubscriptionTv.setOnClickListener(v -> SnowBallUtils.openManageSubscriptionPage(this));
         findViewById(R.id.iv_close).setOnClickListener(v -> LicenseUpgradeActivity.this.finish());
         findViewById(R.id.tv_restore_purchase).setOnClickListener(v -> mLicenseUpgradeModel.refreshLicenseData(true));
+
     }
 
     @Override
@@ -160,11 +163,13 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
         mLoadingPriceView.setVisibility(View.VISIBLE);
         mToPurchaseLayout.setVisibility(View.VISIBLE);
         mPurchasedLayout.setVisibility(View.GONE);
+        mButtonContainer.setVisibility(View.GONE);
     }
 
     @Override
     public void dismissLoadingPriceView() {
         mLoadingPriceView.setVisibility(View.GONE);
+        mButtonContainer.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("NotifyDataSetChanged")
