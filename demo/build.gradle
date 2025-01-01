@@ -7,12 +7,12 @@ android {
     namespace 'com.snowball.sdkdemo'
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "social.media.downloader.video.picture.saver"
+        applicationId "com.snowball.sdkdemo.demoapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        versionCode 10231
-        versionName "1.2.31"
+        versionCode 10000
+        versionName "1.0.0"
     }
 
     buildTypes {

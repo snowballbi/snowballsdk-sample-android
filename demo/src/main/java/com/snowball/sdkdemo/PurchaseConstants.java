@@ -2,32 +2,32 @@ package com.snowball.sdkdemo;
 
 public class PurchaseConstants {
 
-    public static final String BASE64_PLAY_API_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgAaZIsQeiTAahNy4WJvWl3aikZ6t4V+v05695N4LdkqtCuE2gqb76nFvVl0bGFXckH7yXEEE1Kr3oajsKBd/xnJE6B/ZU0lkU549GAkRVGWzR/At24+0yDHA1WbOb5CwFbslXH/fJ6P5XOh08eOewdjb6pCIUQW4h2hueAvDovLMMjob7uUDQkaWFfIJtS+IyzmXkYwASXN0wmkzS8VcJJN6H8TB88I5PeMJz0COn/oUvipSUto7BdKoLHiXd21TU6mNLiqSs3UYV07cuG99Xmb/P+G225IHAZMCbqWYZaZP5J6MgwLKebAFBlbpC+D+8KF8eDAhzs2FmxsOJ6ODlwIDAQAB";
+    public static final String BASE64_PLAY_API_PUBLIC_KEY = "YOUR_PLAY_API_KEY"; // 借助 Play 变现 -> 创收设置 -> 许可
 
     public static final String DEFAULT_SKU_LIST = "{\n" +
-            "  \"iab_product_items\": [\n" +
-            "    {\n" +
-            "      \"iab_item_type\": \"subs\",\n" +
-            "      \"product_item_id\": \"sdownloader.subscription_1m_01\",\n" +
-            "      \"subscription_period\": \"1m\",\n" +
-            "      \"support_free_trial\": false\n" +
-            "    },\n" +
-            "    {\n" +
-            "      \"iab_item_type\": \"subs\",\n" +
-            "      \"product_item_id\": \"sdownloader.subscription_1y_01\",\n" +
-            "      \"subscription_period\": \"1y\",\n" +
-            "      \"support_free_trial\": false,\n" +
-            "      \"free_trial_days\": 3,\n" +
-            "      \"discount_percent\": 0.62\n" +
-            "    },\n" +
-            "    {\n" +
-            "      \"iab_item_type\": \"iap\",\n" +
-            "      \"product_item_id\": \"sdownloader.inapp_lifetime_02\",\n" +
-            "      \"discount_percent\": 0.5\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"recommended_iab_item_id\": \"sdownloader.subscription_1y_01\"\n" +
+            "\t\"iab_product_items\": [\n" +
+            "\t\t{\n" +
+            "\t\t\t\"iab_item_type\": \"subs\",\n" +
+            "\t\t\t\"product_item_id\": \"snowball_sdk_demo.subscription_1m_01\",\n" +
+            "\t\t\t\"subscription_period\": \"1m\"\n" +
+            "\t\t\t\"support_free_trial\": true,\n" +
+            "\t\t},\n" +
+            "\t\t{\n" +
+            "\t\t\t\"iab_item_type\": \"subs\",\n" +
+            "\t\t\t\"product_item_id\": \"snowball_sdk_demo.subscription_1y_01\",\n" +
+            "\t\t\t\"subscription_period\": \"1Y\",\n" +
+            "\t\t\t\"support_free_trial\": true,\n" +
+            "\t\t\t\"free_trial_days\": 3\n" +
+            "\t\t\t\"discount_percent\": 0.45\n" +
+            "\t\t}\n" +
+            "\t\t{\n" +
+            "\t\t\t\"iab_item_type\": \"iap\",\n" +
+            "\t\t\t\"product_item_id\": \"snowball_sdk_demo.inapp_lifetime_01\",\n" +
+            "\t\t\t\"discount_percent\": 0.7\n" +
+            "\t\t}\n" +
+            "\t],\n" +
+            "\t\"recommended_iab_item_id\": \"wdownloader.inapp_lifetime_01\"\n" +
             "}";
 
-    public static final String PURCHASE_HOST_NAME = "store.thinkyeah.com";
+    public static final String PURCHASE_HOST_NAME = "your_purchase_server.com";
 }
