@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "218506384826",
-    "project_id": "snowballdemo-14e1d",
-    "storage_bucket": "snowballdemo-14e1d.firebasestorage.app"
+    "project_number": "177996013042",
+    "project_id": "sdownloader-798ca",
+    "storage_bucket": "sdownloader-798ca.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:218506384826:android:9b2e7640b2b0e62d483983",
+        "mobilesdk_app_id": "1:177996013042:android:71a177bb7faa672225df6b",
         "android_client_info": {
-          "package_name": "com.snowball.sdkdemo.demoapp"
+          "package_name": "social.media.downloader.video.picture.saver"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "177996013042-rkcpvkfpunifn4fm2ngiimdqder5dagk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "social.media.downloader.video.picture.saver",
+            "certificate_hash": "2c5fbafae757c3f773a25fe33cb76e9257b075f1"
+          }
+        },
+        {
+          "client_id": "177996013042-tfi8vv7dib9l2mv9s43no3v5gv3plpuv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDo_FPnglmZP-FA8xU2soO-FVq0t1leKOo"
+          "current_key": "AIzaSyDllAWNft4G0kXXvsRu6rNafjSC832s2FU"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177996013042-tfi8vv7dib9l2mv9s43no3v5gv3plpuv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
