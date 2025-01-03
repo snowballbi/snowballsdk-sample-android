@@ -76,8 +76,7 @@
     <string name="lifetime">Lifetime</string>
     <string name="expire_time">Expire date: %s</string>
     <string name="subscription">Subscription</string>
-    <string name="try_for_free">Try for Free</string>
-    <string name="try_for_free_tips">Try it for free for %1$s days \n %2$s after trial ends</string>
+    <string name="try_for_free_tips">%2$s after trial ends</string>
     <string name="restore_purchase">Restore Purchase</string>
 
 </resources>

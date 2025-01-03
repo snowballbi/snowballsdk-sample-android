@@ -2,12 +2,7 @@ package com.snowball.sdkdemo;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import com.snowball.purchase.business.iab.model.BillingPeriod;
-
-import java.text.DecimalFormat;
-import java.util.Currency;
 
 public class IabStringUtil {
 
@@ -35,47 +30,6 @@ public class IabStringUtil {
             default:
                 return value;
         }
-    }
-
-    public static String convertToPriceEachPeriod(Context context, BillingPeriod billingPeriod, String value) {
-        if (billingPeriod == null) {
-            return value;
-        }
-        BillingPeriod.PeriodType type = billingPeriod.periodType;
-        switch (type) {
-            case DAY:
-                return context.getString(R.string.price_each_day, value);
-            case WEEK:
-                return context.getString(R.string.price_each_week, value);
-            case MONTH:
-                return context.getString(R.string.price_each_month, value);
-            case YEAR:
-                return context.getString(R.string.price_each_year, value);
-            case LIFETIME:
-                return context.getString(R.string.lifetime);
-            default:
-                return value;
-        }
-    }
-
-    public static String getDisplayPrice(@NonNull String currencyCode, double value) {
-        Currency currency = Currency.getInstance(currencyCode);
-        String currencySymbol = currency.getSymbol().toUpperCase();
-
-        DecimalFormat df = new DecimalFormat("0.00");
-        return currencySymbol + df.format(value);
-    }
-
-    public static String getDecimalFormattedPrice(double value) {
-        return new DecimalFormat("0.00").format(value);
-    }
-
-    public static String getDisplayOriginalPriceByDiscount(@NonNull String currencyCode, double currentPrice, double discountPercent) {
-        return getDisplayPrice(currencyCode, getOriginalPriceValueByDiscount(currentPrice, discountPercent));
-    }
-
-    public static double getOriginalPriceValueByDiscount(double currentPrice, double discountPercent) {
-        return 1.0f - discountPercent > 0.001 ? currentPrice / (1.0F - discountPercent) : currentPrice;
     }
 
     public static String getStringByPeriodCycleType(Context context, BillingPeriod period) {

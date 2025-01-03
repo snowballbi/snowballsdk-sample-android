@@ -182,6 +182,7 @@ public class LicenseUpgradeModel {
         mCallback.showLoadingPriceView();
         SkuListSummary listSummary;
         String skuListConfigJson = PurchaseConstants.DEFAULT_SKU_LIST; // You can fetch it from remote config instead
+        gDebug.d("sku list config:" + skuListConfigJson);
         listSummary = IabController.parseIabSubProductItemsFromJson(skuListConfigJson);
         IabController.getInstance().queryIabSku(listSummary, new IabController.QuerySkuCallback() {
             @Override

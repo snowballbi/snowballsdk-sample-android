@@ -203,14 +203,13 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
             Currency currency = Currency.getInstance(priceInfo.currencyCode);
             BillingPeriod billingPeriod = sku.getBillingPeriod();
             DecimalFormat df = new DecimalFormat("0.00");
-            String priceWithPeriod = IabStringUtil.convertToPriceEachPeriod(this, billingPeriod,
+            String priceWithPeriod = IabStringUtil.convertToPricePerPeriod(this, billingPeriod,
                     currency.getSymbol().toUpperCase() + df.format(priceInfo.value));
             mClaimTextView.setVisibility(View.VISIBLE);
             if (sku.isSupportFreeTrial()) {
                 mPurchaseBtn.setText(getString(R.string.days_trial, sku.getFreeTrialDays()));
                 mTryForFreeTv.setVisibility(View.VISIBLE);
-                mTryForFreeTv.setText(getString(R.string.try_for_free_tips,
-                        String.valueOf(sku.getFreeTrialDays()), priceWithPeriod));
+                mTryForFreeTv.setText(getString(R.string.price_after_trial, priceWithPeriod));
                 mClaimTextView.setText(getString(R.string.purchase_claim_subs_with_free_trial, priceWithPeriod));
 
             } else {
