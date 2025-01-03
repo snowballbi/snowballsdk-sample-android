@@ -169,13 +169,13 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
     @Override
     public void dismissLoadingPriceView() {
         mLoadingPriceView.setVisibility(View.GONE);
-        mButtonContainer.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void showPriceList(List<Sku> skuList, SkuListSummary summary) {
         mLoadingPriceView.setVisibility(View.GONE);
+        mButtonContainer.setVisibility(View.VISIBLE);
         mSkuListAdapter.setData(skuList, summary);
         mSkuListAdapter.notifyDataSetChanged();
         Sku recommendSku = mSkuListAdapter.getRecommendedIabSku();
