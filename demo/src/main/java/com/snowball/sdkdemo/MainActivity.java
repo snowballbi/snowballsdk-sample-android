@@ -26,10 +26,10 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.snowball.common.SnowBallLog;
-import com.snowball.purchase.business.LicenseRefresher;
 import com.snowball.purchase.business.SnowBallLicenseController;
 import com.snowball.purchase.business.iab.IabController;
 import com.snowball.purchase.business.license.model.LicenseChangeType;
+import com.snowball.purchase.business.license.model.RefreshLicenseCallback;
 import com.snowball.tracker.SnowBallTracker;
 import com.snowball.tracker.ads.AdType;
 
@@ -59,7 +59,7 @@ public class MainActivity extends ComponentActivity {
 
     private void checkLicense() {
         // This will only check once one day. 
-        SnowBallLicenseController.getInstance().refreshWhenOpenMainUI(new LicenseRefresher.Callback() {
+        SnowBallLicenseController.getInstance().refreshWhenOpenMainUI(new RefreshLicenseCallback() {
             @Override
             public void onRefreshLicenseSuccess(@NonNull String skuGroup, @NonNull LicenseChangeType licenseChangeType, @Nullable String pausedSkuId) {
                 if (licenseChangeType.isDowngrade()) {
@@ -206,7 +206,7 @@ public class MainActivity extends ComponentActivity {
 
             interstitialAd.setOnPaidEventListener(adValue ->
                     AdmobILRDReportHelper.reportAdsEvent(this,
-                        AdType.Interstitial,
+                        AdType.INTERSTITIAL,
                         interstitialAd.getAdUnitId(),
                         interstitialAd.getResponseInfo(),
                         adValue,

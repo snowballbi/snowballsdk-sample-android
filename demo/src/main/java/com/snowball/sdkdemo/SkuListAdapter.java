@@ -112,12 +112,12 @@ public class SkuListAdapter extends RecyclerView.Adapter<SkuListAdapter.SkuItemV
     @SuppressLint("SetTextI18n")
     private void setData(Sku sku, TextView priceTextView, TextView priceDescTextView, TextView periodTextView, TextView discountView) {
         Sku.PriceInfo priceInfo = sku.getPriceInfo();
-        Currency currency = Currency.getInstance(priceInfo.currencyCode);
+        Currency currency = Currency.getInstance(priceInfo.getCurrencyCode());
         BillingPeriod billingPeriod = sku.getBillingPeriod();
         DecimalFormat df = new DecimalFormat("0.00");
         String priceText;
 
-        priceText = currency.getSymbol() + df.format(priceInfo.value);
+        priceText = currency.getSymbol() + df.format(priceInfo.getValue());
         priceTextView.setText(priceText);
 
         boolean setUnitPrice = false;
@@ -128,7 +128,7 @@ public class SkuListAdapter extends RecyclerView.Adapter<SkuListAdapter.SkuItemV
                     && (billingPeriod.periodType != unitPricePeriodType || billingPeriod.periodValue != 1)) {
 
                 BillingPeriod unitPeriod = new BillingPeriod(unitPricePeriodType, 1);
-                double unitPrice = priceInfo.value / billingPeriod.getPeriodInDays() * unitPeriod.getPeriodInDays();
+                double unitPrice = priceInfo.getValue() / billingPeriod.getPeriodInDays() * unitPeriod.getPeriodInDays();
                 String unitPriceStr = IabStringUtil.convertToPricePerPeriod(mHostActivity, unitPeriod, currency.getSymbol() + df.format(unitPrice));
                 priceDescTextView.setText("= " + unitPriceStr);
                 setUnitPrice = true;
@@ -140,7 +140,7 @@ public class SkuListAdapter extends RecyclerView.Adapter<SkuListAdapter.SkuItemV
         if (sku.hasPriceDiscount()) {
             double priceDiscountPercent = sku.getDiscountPercent();
             if (!setUnitPrice && (1.0f - priceDiscountPercent) > 0.001) {
-                priceDescTextView.setText(currency.getSymbol() + df.format(priceInfo.value / (1.0f - priceDiscountPercent)));
+                priceDescTextView.setText(currency.getSymbol() + df.format(priceInfo.getValue() / (1.0f - priceDiscountPercent)));
 
                 priceDescTextView.getPaint().setFlags(priceDescTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 priceDescTextView.setVisibility(View.VISIBLE);

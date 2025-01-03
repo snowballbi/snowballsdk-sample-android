@@ -3,6 +3,7 @@ package com.snowball.sdkdemo;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,6 @@ import com.snowball.common.SnowBallLog;
 import com.snowball.common.SnowBallUtils;
 import com.snowball.purchase.business.SnowBallLicenseController;
 import com.snowball.purchase.business.iab.IabController;
-import com.snowball.purchase.business.iab.IabPurchaseUtil;
 import com.snowball.purchase.business.iab.model.BillingPeriod;
 import com.snowball.purchase.business.iab.model.SkuListSummary;
 import com.snowball.purchase.business.iab.model.Sku;
@@ -139,7 +139,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
         mLoadingPriceView.setVisibility(View.GONE);
         mPurchasedLayout.setVisibility(View.VISIBLE);
         mToPurchaseLayout.setVisibility(View.GONE);
-        if (purchaseData.getSkuType() == SkuType.Subs) {
+        if (purchaseData.getSkuType() == SkuType.SUBS) {
             long endDate = purchaseData.getExpireTime();
             String date = SnowBallUtils.getFormatDate(endDate);
             mPurchasedExpireDateTv.setText(getString(R.string.expire_time, date));
@@ -200,11 +200,11 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
 
         } else {
             Sku.PriceInfo priceInfo = sku.getPriceInfo();
-            Currency currency = Currency.getInstance(priceInfo.currencyCode);
+            Currency currency = Currency.getInstance(priceInfo.getCurrencyCode());
             BillingPeriod billingPeriod = sku.getBillingPeriod();
             DecimalFormat df = new DecimalFormat("0.00");
             String priceWithPeriod = IabStringUtil.convertToPricePerPeriod(this, billingPeriod,
-                    currency.getSymbol().toUpperCase() + df.format(priceInfo.value));
+                    currency.getSymbol().toUpperCase() + df.format(priceInfo.getValue()));
             mClaimTextView.setVisibility(View.VISIBLE);
             if (sku.isSupportFreeTrial()) {
                 mPurchaseBtn.setText(getString(R.string.days_trial, sku.getFreeTrialDays()));
@@ -260,7 +260,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
     public void showDowngradePrompt(String skuGroup, DowngradeType downgradeType, String pausedSkuId) {
         Toast.makeText(this, R.string.license_downgraded, Toast.LENGTH_LONG).show();
 
-        if (downgradeType == DowngradeType.SubsToFreePaused) {
+        if (downgradeType == DowngradeType.SUBS_TO_FREE_PAUSED) {
             showLicensePaused(skuGroup);
         }
     }
@@ -280,7 +280,8 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
     }
 
     public void goToGooglePlayToSeePausedSubsProduct(String pausedSkdId) {
-        Intent intent = IabPurchaseUtil.getGoToGooglePlayToViewPausedSubsProductIntent(pausedSkdId, getPackageName());
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://play.google.com/store/account/subscriptions?sku=" + pausedSkdId + "&package=" + getPackageName()));
         mResumeLicenseActivityResultLauncher.launch(intent);
     }
 

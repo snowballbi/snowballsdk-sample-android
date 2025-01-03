@@ -178,7 +178,7 @@ class AdmobILRDReportHelper {
             placementId = bundle.getString("placement_id");
 
         } else if (AdConstants.Network.Applovin.equalsIgnoreCase(networkName)) {
-            if (adType == AdType.Interstitial) {
+            if (adType == AdType.INTERSTITIAL) {
                 placementId = "INTER";
             }
 

@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import com.snowball.common.AppContext;
 import com.snowball.common.SnowBallLog;
 import com.snowball.common.SnowBallUtils;
-import com.snowball.purchase.business.LicenseRefresher;
 import com.snowball.purchase.business.SnowBallLicenseController;
 import com.snowball.purchase.business.iab.IabController;
 import com.snowball.purchase.business.iab.model.SkuListSummary;
@@ -18,6 +17,7 @@ import com.snowball.purchase.business.license.model.DowngradeType;
 import com.snowball.purchase.business.license.model.LicenseChangeType;
 import com.snowball.purchase.business.license.model.PurchaseData;
 import com.snowball.purchase.business.license.model.PurchaseError;
+import com.snowball.purchase.business.license.model.RefreshLicenseCallback;
 import com.snowball.purchase.business.license.model.RefreshLicenseParam;
 import com.snowball.purchase.business.license.model.SkuType;
 
@@ -109,7 +109,7 @@ public class LicenseUpgradeModel {
                 .packageName(mContext.getPackageName())
                 .shouldCheckLicenseByAdidAndFirebaseId(isRestoreLicenseManually)
                 .build();
-        SnowBallLicenseController.getInstance().refresh(refreshLicenseParam, new LicenseRefresher.Callback() {
+        SnowBallLicenseController.getInstance().refresh(refreshLicenseParam, new RefreshLicenseCallback() {
             @Override
             public void onRefreshLicenseSuccess(@NonNull String skuGroup, @NonNull LicenseChangeType licenseChangeType, @Nullable String pausedSkuId) {
                 if (mCallback.isViewFinishing()) {
@@ -139,7 +139,7 @@ public class LicenseUpgradeModel {
             return;
         }
         PurchaseData purchaseData = SnowBallLicenseController.getInstance().getPurchaseData();
-        if (licenseChangeType == LicenseChangeType.Upgrade) {
+        if (licenseChangeType == LicenseChangeType.UPGRADE) {
             if (purchaseData == null) {
                 gDebug.e("license info not be null");
                 if (isRestoreLicenseManually) {
@@ -154,7 +154,7 @@ public class LicenseUpgradeModel {
             loadData(false);
             mCallback.showDowngradePrompt(skuGroup, licenseChangeType.getDowngradeType(), pausedSkuId);
 
-        } else if (licenseChangeType == LicenseChangeType.DataChange) {
+        } else if (licenseChangeType == LicenseChangeType.DATA_CHANGE) {
             if (purchaseData == null) {
                 gDebug.e("license info not be null");
                 if (isRestoreLicenseManually) {

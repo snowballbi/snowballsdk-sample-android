@@ -5,9 +5,7 @@
     <string name="license_upgraded">License Upgraded</string>
     <string name="loading">loading…</string>
     <string name="enjoy_premium">Enjoy Premium</string>
-    <string name="premium_desc">  1. No Ads. 2. Unlimited Functions
-    </string>
-
+    <string name="premium_desc">  1. No Ads. 2. Unlimited Functions</string>
 
     <string name="days_trial">%d Days Trial</string>
     <string name="price_per_day">%s / Day</string>
@@ -15,10 +13,6 @@
     <string name="price_per_month">%s / Month</string>
     <string name="price_per_year">%s / Year</string>
     <string name="price_after_trial">Then %s</string>
-    <string name="price_each_day">%s each day</string>
-    <string name="price_each_week">%s each week</string>
-    <string name="price_each_month">%s each month</string>
-    <string name="price_each_year">%s each year</string>
     <string name="purchase_claim_subs_with_free_trial">The subscription gives you unlimited access to the premium features. You will automatically be charged %s at the end of the trial until you cancel it. You can cancel Subscription on Google Play.</string>
     <string name="purchase_claim_subs_without_free_trial">The subscription gives you unlimited access to the premium features. You will automatically be charged %s until you cancel it. You can cancel Subscription on Google Play.</string>
     <string name="purchase_claim_lifetime">The one-time purchase gives you unlimited access to the above premium features. No subscriptions or more purchases are needed in the future.</string>
@@ -76,7 +70,6 @@
     <string name="lifetime">Lifetime</string>
     <string name="expire_time">Expire date: %s</string>
     <string name="subscription">Subscription</string>
-    <string name="try_for_free_tips">%2$s after trial ends</string>
     <string name="restore_purchase">Restore Purchase</string>
 
 </resources>
