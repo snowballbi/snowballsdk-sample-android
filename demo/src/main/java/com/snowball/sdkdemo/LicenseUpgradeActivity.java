@@ -207,7 +207,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
                     currency.getSymbol().toUpperCase() + df.format(priceInfo.value));
             mClaimTextView.setVisibility(View.VISIBLE);
             if (sku.isSupportFreeTrial()) {
-                mPurchaseBtn.setText(getString(R.string.try_for_free));
+                mPurchaseBtn.setText(getString(R.string.days_trial, sku.getFreeTrialDays()));
                 mTryForFreeTv.setVisibility(View.VISIBLE);
                 mTryForFreeTv.setText(getString(R.string.try_for_free_tips,
                         String.valueOf(sku.getFreeTrialDays()), priceWithPeriod));
