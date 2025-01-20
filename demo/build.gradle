@@ -29,8 +29,8 @@ android {
 
 dependencies {
 
-    implementation 'com.snowballbi.sdk:core:1.0.5'
-    implementation 'com.snowballbi.sdk:purchase:1.0.5'
+    implementation 'com.snowballbi.sdk:core:1.0.6'
+    implementation 'com.snowballbi.sdk:purchase:1.0.6'
 
     implementation libs.appcompat
     implementation libs.material
@@ -54,5 +54,7 @@ dependencies {
 
     implementation platform("com.squareup.okhttp3:okhttp-bom:$rootProject.okHttpBomVersion")
     implementation "com.squareup.okhttp3:okhttp"
+    implementation "org.greenrobot:eventbus:3.3.1"
+
 
 }
