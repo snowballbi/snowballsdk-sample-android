@@ -58,7 +58,7 @@ public class MainActivity extends ComponentActivity {
     }
 
     private void checkLicense() {
-        // This will only check once one day. 
+        // This will only check once one day.
         SnowBallLicenseController.getInstance().refreshWhenOpenMainUI(new RefreshLicenseCallback() {
             @Override
             public void onRefreshLicenseSuccess(@NonNull String skuGroup, @NonNull LicenseChangeType licenseChangeType, @Nullable String pausedSkuId) {
@@ -68,7 +68,7 @@ public class MainActivity extends ComponentActivity {
             }
 
             @Override
-            public void onRefreshLicenseFailed(@NonNull String skuGroup, int errorCode, String data) {
+            public void onRefreshLicenseFailed(@NonNull String skuGroup, int errorCode, @Nullable String data) {
                 gDebug.e("onRefreshLicenseFailed, errorCode:" + errorCode + ", data: " + data);
             }
         });
@@ -101,12 +101,12 @@ public class MainActivity extends ComponentActivity {
         // Only for test to cancel lifetime purchase
         btnConsumeLifetimePurchase.setOnClickListener((v) -> IabController.getInstance().consumeAllInappPurchases(new IabController.ConsumePurchaseCallback() {
             @Override
-            public void onConsumed(String purchaseToken, String skuId) {
+            public void onConsumed(@NonNull String purchaseToken, @NonNull String skuId) {
                 Toast.makeText(MainActivity.this, "Consumed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onError(IabController.BillingError error) {
+            public void onError(@NonNull IabController.BillingError error) {
                 Toast.makeText(MainActivity.this, "Error: " + error.name(), Toast.LENGTH_SHORT).show();
             }
 
@@ -206,12 +206,12 @@ public class MainActivity extends ComponentActivity {
 
             interstitialAd.setOnPaidEventListener(adValue ->
                     AdmobILRDReportHelper.reportAdsEvent(this,
-                        AdType.INTERSTITIAL,
-                        interstitialAd.getAdUnitId(),
-                        interstitialAd.getResponseInfo(),
-                        adValue,
-                        adsScene
-            ));
+                            AdType.INTERSTITIAL,
+                            interstitialAd.getAdUnitId(),
+                            interstitialAd.getResponseInfo(),
+                            adValue,
+                            adsScene
+                    ));
 
             mInterstitialAd.show(MainActivity.this);
         } else {

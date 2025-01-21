@@ -28,7 +28,7 @@ import java.util.Locale;
 public class SkuListAdapter extends RecyclerView.Adapter<SkuListAdapter.SkuItemViewHolder> {
 
     public interface SkuListAdapterListener {
-        void onIabItemClicked(int position, Sku sku);
+        void onIabItemClicked(int position, @NonNull Sku sku);
     }
 
     protected Activity mHostActivity;

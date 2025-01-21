@@ -6,14 +6,15 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.adjust.sdk.Adjust;
+import com.adjust.sdk.AdjustAttribution;
 import com.adjust.sdk.AdjustConfig;
 import com.snowball.common.AppContext;
 import com.snowball.common.SnowBallLog;
 import com.snowball.purchase.business.SnowBallLicenseController;
 import com.snowball.purchase.business.license.SnowBallLicenseConfigure;
 import com.snowball.push.IPushReceiverHandler;
-import com.snowball.push.PushConstants;
 import com.snowball.push.SnowBallPush;
+import com.snowball.push.PushConstants;
 import com.snowball.tracker.SnowBallTracker;
 import com.snowball.tracker.attribution.AttributionInfo;
 import com.snowball.tracker.attribution.AttributionSource;

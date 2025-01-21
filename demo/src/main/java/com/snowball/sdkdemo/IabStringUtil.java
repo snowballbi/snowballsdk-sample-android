@@ -2,15 +2,16 @@ package com.snowball.sdkdemo;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.snowball.purchase.business.iab.model.BillingPeriod;
+
+import java.text.DecimalFormat;
+import java.util.Currency;
 
 public class IabStringUtil {
 
-    public static String convertToPricePerPeriod(Context context, BillingPeriod billingPeriod, String value) {
-        if (billingPeriod == null) {
-            return value;
-        }
-
+    public static String convertToPricePerPeriod(@NonNull Context context, @NonNull BillingPeriod billingPeriod, @NonNull String value) {
         BillingPeriod.PeriodType type = billingPeriod.periodType;
         switch (type) {
             case DAY:
@@ -32,7 +33,7 @@ public class IabStringUtil {
         }
     }
 
-    public static String getStringByPeriodCycleType(Context context, BillingPeriod period) {
+    public static String getStringByPeriodCycleType(@NonNull Context context, @NonNull BillingPeriod period) {
         BillingPeriod.PeriodType type = period.periodType;
         if (period.periodValue == 1) {
             switch (type) {

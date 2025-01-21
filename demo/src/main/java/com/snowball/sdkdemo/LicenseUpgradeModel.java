@@ -11,8 +11,8 @@ import com.snowball.common.SnowBallLog;
 import com.snowball.common.SnowBallUtils;
 import com.snowball.purchase.business.SnowBallLicenseController;
 import com.snowball.purchase.business.iab.IabController;
-import com.snowball.purchase.business.iab.model.SkuListSummary;
 import com.snowball.purchase.business.iab.model.Sku;
+import com.snowball.purchase.business.iab.model.SkuListSummary;
 import com.snowball.purchase.business.license.model.DowngradeType;
 import com.snowball.purchase.business.license.model.LicenseChangeType;
 import com.snowball.purchase.business.license.model.PurchaseData;
@@ -38,21 +38,21 @@ public class LicenseUpgradeModel {
 
         void showPurchaseFailed(@NonNull PurchaseError purchaseError, @Nullable String data);
 
-        void showProView(PurchaseData purchaseData);
+        void showProView(@NonNull PurchaseData purchaseData);
 
-        void showLicenseUpgradedPrompt(SkuType skuType);
+        void showLicenseUpgradedPrompt(@NonNull SkuType skuType);
 
         void showLoadingPriceView();
 
         void dismissLoadingPriceView();
 
-        void showPriceList(List<Sku> skuList, SkuListSummary summary);
+        void showPriceList(@NonNull List<Sku> skuList, @NonNull SkuListSummary summary);
 
-        void showLoadingPriceFailed(IabController.BillingError billingError);
+        void showLoadingPriceFailed(@NonNull IabController.BillingError billingError);
 
         void showRefreshingLicense();
 
-        void showRefreshLicenseFailed(@NonNull String skuGroup, int errorCode, String data);
+        void showRefreshLicenseFailed(@NonNull String skuGroup, int errorCode, @Nullable String data);
 
         void dismissRefreshingLicense();
 
@@ -62,9 +62,9 @@ public class LicenseUpgradeModel {
 
         void showNoProPurchasedMessage();
 
-        void showDowngradePrompt(String skuGroup, DowngradeType downgradeType, String pausedSkuId);
+        void showDowngradePrompt(@NonNull String skuGroup, @NonNull DowngradeType downgradeType, @Nullable String pausedSkuId);
 
-        void showLicensePaused(String skuId);
+        void showLicensePaused(@NonNull String skuId);
 
     }
 

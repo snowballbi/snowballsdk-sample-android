@@ -29,8 +29,8 @@ class AdmobILRDReportHelper {
     private static final SnowBallLog gDebug = SnowBallLog.createCommonLogger("AdmobILRDReportHelper");
 
     /** @noinspection SameParameterValue*/
-    static void reportAdsEvent(Context context, AdType adType, String adUnitId,
-                               ResponseInfo responseInfo, @NonNull AdValue adValue, @NonNull String scene) {
+    static void reportAdsEvent(@NonNull Context context, @NonNull AdType adType, @NonNull String adUnitId,
+                               @Nullable ResponseInfo responseInfo, @NonNull AdValue adValue, @NonNull String scene) {
         gDebug.d("==> reportILRD, adType: " + adType + ", adUnitId: " + adUnitId);
 
         final String networkName = getNetworkName(responseInfo);

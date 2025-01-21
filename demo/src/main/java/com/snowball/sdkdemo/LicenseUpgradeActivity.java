@@ -26,8 +26,8 @@ import com.snowball.common.SnowBallUtils;
 import com.snowball.purchase.business.SnowBallLicenseController;
 import com.snowball.purchase.business.iab.IabController;
 import com.snowball.purchase.business.iab.model.BillingPeriod;
-import com.snowball.purchase.business.iab.model.SkuListSummary;
 import com.snowball.purchase.business.iab.model.Sku;
+import com.snowball.purchase.business.iab.model.SkuListSummary;
 import com.snowball.purchase.business.license.model.DowngradeType;
 import com.snowball.purchase.business.license.model.PurchaseData;
 import com.snowball.purchase.business.license.model.PurchaseError;
@@ -135,7 +135,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
     }
 
     @Override
-    public void showProView(PurchaseData purchaseData) {
+    public void showProView(@NonNull PurchaseData purchaseData) {
         mLoadingPriceView.setVisibility(View.GONE);
         mPurchasedLayout.setVisibility(View.VISIBLE);
         mToPurchaseLayout.setVisibility(View.GONE);
@@ -154,7 +154,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
     }
 
     @Override
-    public void showLicenseUpgradedPrompt(SkuType skuType) {
+    public void showLicenseUpgradedPrompt(@NonNull SkuType skuType) {
         Toast.makeText(this, getString(R.string.message_license_upgraded), Toast.LENGTH_LONG).show();
     }
 
@@ -173,7 +173,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void showPriceList(List<Sku> skuList, SkuListSummary summary) {
+    public void showPriceList(@NonNull List<Sku> skuList, @NonNull SkuListSummary summary) {
         mLoadingPriceView.setVisibility(View.GONE);
         mButtonContainer.setVisibility(View.VISIBLE);
         mSkuListAdapter.setData(skuList, summary);
@@ -221,7 +221,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
     }
 
     @Override
-    public void showLoadingPriceFailed(IabController.BillingError billingError) {
+    public void showLoadingPriceFailed(@NonNull IabController.BillingError billingError) {
         Toast.makeText(this, getString(R.string.load_price_error), Toast.LENGTH_LONG).show();
         finish();
     }
@@ -257,7 +257,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
     }
 
     @Override
-    public void showDowngradePrompt(String skuGroup, DowngradeType downgradeType, String pausedSkuId) {
+    public void showDowngradePrompt(@NonNull String skuGroup, @NonNull DowngradeType downgradeType, @Nullable String pausedSkuId) {
         Toast.makeText(this, R.string.license_downgraded, Toast.LENGTH_LONG).show();
 
         if (downgradeType == DowngradeType.SUBS_TO_FREE_PAUSED) {
@@ -266,13 +266,11 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
     }
 
     @Override
-    public void showLicensePaused(String skuId) {
+    public void showLicensePaused(@NonNull String skuId) {
         android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(this)
                 .setCancelable(false)
                 .setMessage(R.string.dialog_message_license_paused_to_resume)
-                .setPositiveButton(R.string.dialog_button_resume, (dialog, which) -> {
-                    goToGooglePlayToSeePausedSubsProduct(skuId);
-                })
+                .setPositiveButton(R.string.dialog_button_resume, (dialog, which) -> goToGooglePlayToSeePausedSubsProduct(skuId))
                 .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .create();
         alertDialog.setOwnerActivity(this);
