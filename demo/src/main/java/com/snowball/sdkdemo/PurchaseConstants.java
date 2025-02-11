@@ -8,7 +8,7 @@ public class PurchaseConstants {
             "\t\"iab_product_items\": [\n" +
             "\t\t{\n" +
             "\t\t\t\"iab_item_type\": \"subs\",\n" +
-            "\t\t\t\"product_item_id\": \"snowball_sdk_demo.subscription_1w_01\",\n" +
+            "\t\t\t\"product_item_id\": \"snowball_sdk_demo.subscription_1w_01\"\n" +
             "\t\t},\n" +
             "\t\t{\n" +
             "\t\t\t\"iab_item_type\": \"subs\",\n" +
@@ -27,6 +27,8 @@ public class PurchaseConstants {
             "\t\t}\n" +
             "\t],\n" +
             "\t\"recommended_iab_item_id\": \"snowball_sdk_demo.subscription_1m_01\"\n" +
+            "\t\"show_unit_price\": true\n" +
+            "\t\"unit_price_period\": \"w\"" +
             "}";
 
     public static final String PURCHASE_HOST_NAME = "your_purchase_server.com";
