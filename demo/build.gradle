@@ -29,14 +29,14 @@ android {
 
 dependencies {
 
-    implementation 'com.snowballbi.sdk:core:1.0.7'
-    implementation 'com.snowballbi.sdk:purchase:1.0.7'
-
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.recyclerview
+
+    implementation 'com.snowballbi.sdk:core:1.1.0'
+    implementation 'com.snowballbi.sdk:purchase:1.1.0'
 
     implementation platform("com.google.firebase:firebase-bom:$rootProject.firebaseBomVersion")
     implementation "com.google.firebase:firebase-messaging"

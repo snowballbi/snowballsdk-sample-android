@@ -2,24 +2,27 @@ package com.snowball.sdkdemo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.snowball.common.AppContext;
-import com.snowball.common.SnowBallLog;
-import com.snowball.common.SnowBallUtils;
-import com.snowball.purchase.business.SnowBallLicenseController;
-import com.snowball.purchase.business.iab.IabController;
-import com.snowball.purchase.business.iab.model.Sku;
-import com.snowball.purchase.business.iab.model.SkuListSummary;
-import com.snowball.purchase.business.license.model.DowngradeType;
-import com.snowball.purchase.business.license.model.LicenseChangeType;
-import com.snowball.purchase.business.license.model.PurchaseData;
-import com.snowball.purchase.business.license.model.PurchaseError;
-import com.snowball.purchase.business.license.model.RefreshLicenseCallback;
-import com.snowball.purchase.business.license.model.RefreshLicenseParam;
-import com.snowball.purchase.business.license.model.SkuType;
+import com.snowball.core.common.AppContext;
+import com.snowball.core.common.FrcHelper;
+import com.snowball.core.common.SnowBallLog;
+import com.snowball.purchase.SnowBallLicenseController;
+import com.snowball.purchase.callback.PurchaseCallback;
+import com.snowball.purchase.callback.QuerySkuCallback;
+import com.snowball.purchase.callback.RefreshLicenseCallback;
+import com.snowball.purchase.model.BillingError;
+import com.snowball.purchase.model.DowngradeType;
+import com.snowball.purchase.model.LicenseChangeType;
+import com.snowball.purchase.model.PurchaseData;
+import com.snowball.purchase.model.PurchaseError;
+import com.snowball.purchase.model.RefreshLicenseParam;
+import com.snowball.purchase.model.Sku;
+import com.snowball.purchase.model.SkuListSummary;
+import com.snowball.purchase.model.SkuType;
 
 import java.util.List;
 
@@ -48,7 +51,7 @@ public class LicenseUpgradeModel {
 
         void showPriceList(@NonNull List<Sku> skuList, @NonNull SkuListSummary summary);
 
-        void showLoadingPriceFailed(@NonNull IabController.BillingError billingError);
+        void showLoadingPriceFailed(@NonNull BillingError billingError);
 
         void showRefreshingLicense();
 
@@ -68,7 +71,7 @@ public class LicenseUpgradeModel {
 
     }
 
-    public LicenseUpgradeModel(Context context, Callback callback) {
+    public LicenseUpgradeModel(@NonNull Context context, @NonNull Callback callback) {
         mContext = context;
         mCallback = callback;
     }
@@ -94,7 +97,7 @@ public class LicenseUpgradeModel {
             return;
         }
 
-        if (!SnowBallUtils.isNetworkAvailable(mContext)) {
+        if (!Utils.isNetworkAvailable(mContext)) {
             mCallback.showNoNetworkMessage();
             return;
         }
@@ -180,13 +183,14 @@ public class LicenseUpgradeModel {
 
     private void loadPrice() {
         mCallback.showLoadingPriceView();
-        SkuListSummary listSummary;
-        String skuListConfigJson = PurchaseConstants.DEFAULT_SKU_LIST; // You can fetch it from remote config instead
+        String skuListConfigJson = FrcHelper.getString("sku_list");
+        if (TextUtils.isEmpty(skuListConfigJson)) {
+            skuListConfigJson = PurchaseConstants.DEFAULT_SKU_LIST;
+        }
         gDebug.d("sku list config:" + skuListConfigJson);
-        listSummary = IabController.parseIabSubProductItemsFromJson(skuListConfigJson);
-        IabController.getInstance().queryIabSku(listSummary, new IabController.QuerySkuCallback() {
+        SnowBallLicenseController.getInstance().queryIabSku(skuListConfigJson, new QuerySkuCallback() {
             @Override
-            public void onQuerySkuFinished(List<Sku> skuItemList, SkuListSummary skuListSummary) {
+            public void onQuerySkuFinished(@NonNull List<Sku> skuItemList, @NonNull SkuListSummary skuListSummary) {
                 gDebug.d("==> loadPlayIabProductSku, onQueryIabProductSkuFinished");
                 if (SnowBallLicenseController.getInstance().isProLicense()) {
                     return;
@@ -207,7 +211,7 @@ public class LicenseUpgradeModel {
             }
 
             @Override
-            public void onQueryError(IabController.BillingError billingError) {
+            public void onQueryError(@NonNull BillingError billingError) {
                 gDebug.e("load pab iab items sku failed, error " + billingError);
                 if (SnowBallLicenseController.getInstance().isProLicense()) {
                     return;
@@ -231,7 +235,7 @@ public class LicenseUpgradeModel {
             return;
         }
 
-        if (!SnowBallUtils.isNetworkAvailable(mContext)) {
+        if (!Utils.isNetworkAvailable(mContext)) {
             mCallback.showNoNetworkMessage();
             return;
         }
@@ -244,9 +248,9 @@ public class LicenseUpgradeModel {
             return;
         }
 
-        IabController.getInstance().purchase((Activity) mContext, sku, purchaseScene, new IabController.PurchaseCallback() {
+        SnowBallLicenseController.getInstance().purchase((Activity) mContext, sku, purchaseScene, new PurchaseCallback() {
             @Override
-            public void purchaseSuccessfully(PurchaseData purchaseData) {
+            public void purchaseSuccessfully(@NonNull PurchaseData purchaseData) {
                 if (mCallback.isViewFinishing()) {
                     return;
                 }
@@ -255,7 +259,7 @@ public class LicenseUpgradeModel {
             }
 
             @Override
-            public void showPurchaseFailed(PurchaseError purchaseError, @Nullable String data) {
+            public void showPurchaseFailed(@NonNull PurchaseError purchaseError, @Nullable String data) {
                 if (mCallback.isViewFinishing()) {
                     return;
                 }

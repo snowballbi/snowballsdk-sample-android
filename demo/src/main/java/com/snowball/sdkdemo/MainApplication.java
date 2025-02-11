@@ -6,18 +6,16 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.adjust.sdk.Adjust;
-import com.adjust.sdk.AdjustAttribution;
 import com.adjust.sdk.AdjustConfig;
-import com.snowball.common.AppContext;
-import com.snowball.common.SnowBallLog;
-import com.snowball.purchase.business.SnowBallLicenseController;
-import com.snowball.purchase.business.license.SnowBallLicenseConfigure;
-import com.snowball.push.IPushReceiverHandler;
-import com.snowball.push.SnowBallPush;
-import com.snowball.push.PushConstants;
-import com.snowball.tracker.SnowBallTracker;
-import com.snowball.tracker.attribution.AttributionInfo;
-import com.snowball.tracker.attribution.AttributionSource;
+import com.snowball.core.SnowBallCore;
+import com.snowball.core.common.SnowBallLog;
+import com.snowball.core.push.IPushReceiverHandler;
+import com.snowball.core.push.PushConstants;
+import com.snowball.core.tracker.SnowBallTracker;
+import com.snowball.core.tracker.attribution.AttributionInfo;
+import com.snowball.core.tracker.attribution.AttributionSource;
+import com.snowball.purchase.SnowBallLicenseController;
+import com.snowball.purchase.callback.LicenseInitCallback;
 
 import org.json.JSONObject;
 
@@ -30,47 +28,48 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppContext.set(this); // Used in snowball sdk. Must be called.
-
-        initSnowBallTracker();
-        initSnowBallLicense(); // optional
-        initSnowBallPush();
+        initSnowBallCore();
+        initSnowBallLicense();
+        subscribeTopics(); // optional
         reportAttributeFromAdjust(); // optional
     }
 
-    private void initSnowBallTracker() {
-        SnowBallTracker.getInstance().init(this);
+    private void initSnowBallCore() {
+        SnowBallCore.init(new SnowBallCore.InitParamBuilder()
+                .application(this)
+                .enablePush(() -> SnowBallLicenseController.getInstance().isProLicense(), new IPushReceiverHandler() {
+                        @Override
+                        public boolean handlePushData(@NonNull Context context,
+                                                      @NonNull String pushMessageId,
+                                                      @NonNull JSONObject pushData,
+                                                      boolean highPriority) {
+
+                            String actionType = pushData.optString(PushConstants.PUSH_DATA_KEY_ACTION);
+                            gDebug.d("handlePushData, action type:" + actionType + ", data:" + pushData);
+                            // handle your custom action operations here
+                            return true;
+                        }
+
+                        @Override
+                        public boolean handlePushNotificationOnForeground(@NonNull Context context, String title, String body, @NonNull Map<String, String> pushData) {
+                            String actionType = pushData.get(PushConstants.PUSH_DATA_KEY_ACTION);
+                            gDebug.d("handlePushData, action type: " + actionType + ", title: " + title + ", boday: " + body);
+                            // handle your custom action operations here
+                            return true;
+                        }
+                    })
+                .remoteConfigDefaultResId(R.xml.firebase_remote_config_default)
+                .build());
+
     }
 
-    private void initSnowBallPush() {
-        SnowBallPush.getInstance(this).init(() -> SnowBallLicenseController.getInstance().isProLicense(), new IPushReceiverHandler() {
-            @Override
-            public boolean handlePushData(@NonNull Context context,
-                                          @NonNull String pushMessageId,
-                                          @NonNull JSONObject pushData,
-                                          boolean highPriority) {
-
-                String actionType = pushData.optString(PushConstants.PUSH_DATA_KEY_ACTION);
-                gDebug.d("handlePushData, action type:" + actionType + ", data:" + pushData);
-                // handle your custom action operations here
-                return true;
-            }
-
-            @Override
-            public boolean handlePushNotificationOnForeground(@NonNull Context context, String title, String body, @NonNull Map<String, String> pushData) {
-                String actionType = pushData.get(PushConstants.PUSH_DATA_KEY_ACTION);
-                gDebug.d("handlePushData, action type: " + actionType + ", title: " + title + ", boday: " + body);
-                // handle your custom action operations here
-                return true;
-            }
-        });
-
-        //subscribe any app custom topic if needed
+    private void subscribeTopics() {
 //        SnowBallPush.getInstance(this).subscribeToTopic("PUSH_TOPIC_SAMPLE");
+//        SnowBallPush.getInstance(this).unsubscribeToTopic("PUSH_TOPIC_SAMPLE");
     }
 
     private void initSnowBallLicense() {
-        SnowBallLicenseController.getInstance().init(new SnowBallLicenseConfigure.LicenseInitCallback() {
+        SnowBallLicenseController.getInstance().init(new LicenseInitCallback() {
 
             @Override
             public String getPlayBillingBase64ApiPublicKey() {

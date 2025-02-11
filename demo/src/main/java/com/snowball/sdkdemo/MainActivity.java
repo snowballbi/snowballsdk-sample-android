@@ -1,5 +1,6 @@
 package com.snowball.sdkdemo;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,23 +27,47 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.snowball.common.SnowBallLog;
-import com.snowball.purchase.business.SnowBallLicenseController;
-import com.snowball.purchase.business.iab.IabController;
-import com.snowball.purchase.business.license.model.LicenseChangeType;
-import com.snowball.purchase.business.license.model.RefreshLicenseCallback;
-import com.snowball.tracker.SnowBallTracker;
-import com.snowball.tracker.ads.AdType;
+import com.snowball.core.common.FrcHelper;
+import com.snowball.core.common.SnowBallLog;
+import com.snowball.core.tracker.SnowBallTracker;
+import com.snowball.core.tracker.ads.AdType;
+import com.snowball.purchase.SnowBallLicenseController;
+import com.snowball.purchase.callback.ConsumePurchaseCallback;
+import com.snowball.purchase.callback.RefreshLicenseCallback;
+import com.snowball.purchase.model.BillingError;
+import com.snowball.purchase.model.LicenseChangeType;
 
 public class MainActivity extends ComponentActivity {
     private static final SnowBallLog gDebug = SnowBallLog.createCommonLogger("MainActivity");
     private TextView mTextViewPushToken;
+    private Button mEnableFrcTestModeButton;
+    private Button mDisbaleFrcTestModeButton;
 
     private String mPushInstanceToken;
+
+    private final FrcHelper.FrcCallback mFrcCallback = new FrcHelper.FrcCallback() {
+        @Override
+        public void onReady() {
+            gDebug.d("onReady called");
+            queryFirebaseRemoteConfigId();
+        }
+
+        @Override
+        public void onRefreshed() {
+            gDebug.d("onRefreshed called");
+            queryFirebaseRemoteConfigId();
+        }
+
+        @Override
+        public void onRefreshedButVersionIdNotChanged() {
+            gDebug.d("onRefreshedButVersionIdNotChanged called");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -50,11 +76,21 @@ public class MainActivity extends ComponentActivity {
             return insets;
         });
 
+        FrcHelper.refresh(); // Suggest calling this on your first open activity
+
+        FrcHelper.addCallback(mFrcCallback);
+
         initViews();
 
         initAdmob();
 
         checkLicense();
+    }
+
+    @Override
+    protected void onDestroy() {
+        FrcHelper.removeCallback(mFrcCallback);
+        super.onDestroy();
     }
 
     private void checkLicense() {
@@ -83,7 +119,7 @@ public class MainActivity extends ComponentActivity {
             loadAndShowDemoAds();
         });
 
-        mTextViewPushToken = findViewById(R.id.textUserPushToken);
+        mTextViewPushToken = findViewById(R.id.user_push_token_text_view);
 
         Button btnCopyPushToken = findViewById(R.id.btn_copy_push_token);
         btnCopyPushToken.setOnClickListener((v) -> {
@@ -99,14 +135,14 @@ public class MainActivity extends ComponentActivity {
 
         Button btnConsumeLifetimePurchase = findViewById(R.id.btn_consume_lifetime_purchase);
         // Only for test to cancel lifetime purchase
-        btnConsumeLifetimePurchase.setOnClickListener((v) -> IabController.getInstance().consumeAllInappPurchases(new IabController.ConsumePurchaseCallback() {
+        btnConsumeLifetimePurchase.setOnClickListener((v) -> SnowBallLicenseController.getInstance().consumeAllInappPurchases(new ConsumePurchaseCallback() {
             @Override
-            public void onConsumed(@NonNull String purchaseToken, @NonNull String skuId) {
+            public void onConsumed(@NonNull String purchaseToken, @NonNull String skuId, @Nullable String orderId) {
                 Toast.makeText(MainActivity.this, "Consumed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onError(@NonNull IabController.BillingError error) {
+            public void onError(@NonNull BillingError error) {
                 Toast.makeText(MainActivity.this, "Error: " + error.name(), Toast.LENGTH_SHORT).show();
             }
 
@@ -116,8 +152,36 @@ public class MainActivity extends ComponentActivity {
             }
         }));
 
+        findViewById(R.id.btn_refresh_frc).setOnClickListener(v -> FrcHelper.refresh());
+
+        View.OnClickListener onClickListener = v -> {
+            boolean enabled = !FrcHelper.isTestModeEnabled();
+            FrcHelper.setTestModeEnabled(enabled);
+            Toast.makeText(this, enabled ? "Frc Test Mode Enabled" : "Frc Test Mode Disabled", Toast.LENGTH_SHORT).show();
+            refreshTestModeButtonStatus();
+        };
+        mEnableFrcTestModeButton = findViewById(R.id.btn_enable_frc_test_mode);
+        mEnableFrcTestModeButton.setOnClickListener(onClickListener);
+        mDisbaleFrcTestModeButton = findViewById(R.id.btn_disable_frc_test_mode);
+        mDisbaleFrcTestModeButton.setOnClickListener(onClickListener);
+
+        refreshTestModeButtonStatus();
 
         queryFirebasePushToken(false);
+
+        queryFirebaseRemoteConfigId();
+    }
+
+    private void refreshTestModeButtonStatus() {
+        boolean isTestModeEnabled = FrcHelper.isTestModeEnabled();
+        mEnableFrcTestModeButton.setVisibility(isTestModeEnabled ? View.GONE : View.VISIBLE);
+        mDisbaleFrcTestModeButton.setVisibility(isTestModeEnabled ? View.VISIBLE : View.GONE);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void queryFirebaseRemoteConfigId() {
+        TextView frcVersionIdTextView = findViewById(R.id.frc_version_id_textView);
+        frcVersionIdTextView.setText("Firebase Remote Config Version Id: " + FrcHelper.getVersionId());
     }
 
     private void copyPushToken() {
@@ -131,6 +195,7 @@ public class MainActivity extends ComponentActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void queryFirebasePushToken(boolean autoCopy) {
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
@@ -145,7 +210,7 @@ public class MainActivity extends ComponentActivity {
                     gDebug.d("Refreshed token: " + token);
                     mPushInstanceToken = token;
                     if (mTextViewPushToken != null) {
-                        mTextViewPushToken.setText(mPushInstanceToken);
+                        mTextViewPushToken.setText("Push Token: " + mPushInstanceToken);
 
                         if (autoCopy) {
                             ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);

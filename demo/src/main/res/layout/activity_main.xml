@@ -53,28 +53,52 @@
         android:layout_marginHorizontal="60dp"
         android:text="Consume Lifetime Purchase" />
 
+    <Button
+        android:id="@+id/btn_refresh_frc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="60dp"
+        android:text="Refresh FRC" />
+
+    <Button
+        android:id="@+id/btn_enable_frc_test_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="60dp"
+        android:text="Enable FRC Test Mode" />
+
+    <Button
+        android:id="@+id/btn_disable_frc_test_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="60dp"
+        android:text="Disable FRC Test Mode"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/vUserPushToken"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="10dp">
         <TextView
+            android:id="@+id/frc_version_id_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="100dp"
-            android:layout_marginBottom="50dp"
-            android:textSize="16sp"
-            android:text="User PushToken: " />
+            android:textSize="14sp"/>
 
         <TextView
-            android:id="@+id/textUserPushToken"
+            android:id="@+id/user_push_token_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:textSize="14sp"
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="60dp" />
+            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 

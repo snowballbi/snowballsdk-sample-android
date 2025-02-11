@@ -12,11 +12,11 @@ import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdValue;
 import com.google.android.gms.ads.AdapterResponseInfo;
 import com.google.android.gms.ads.ResponseInfo;
-import com.snowball.common.SnowBallLog;
-import com.snowball.tracker.SnowBallTracker;
-import com.snowball.tracker.ads.AdConstants;
-import com.snowball.tracker.ads.AdType;
-import com.snowball.tracker.ads.ILRDInfo;
+import com.snowball.core.common.SnowBallLog;
+import com.snowball.core.tracker.SnowBallTracker;
+import com.snowball.core.tracker.ads.AdConstants;
+import com.snowball.core.tracker.ads.AdType;
+import com.snowball.core.tracker.ads.ILRDInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;

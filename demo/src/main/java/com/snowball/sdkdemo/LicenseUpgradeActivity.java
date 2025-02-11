@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -21,20 +22,16 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.snowball.common.SnowBallLog;
-import com.snowball.common.SnowBallUtils;
-import com.snowball.purchase.business.SnowBallLicenseController;
-import com.snowball.purchase.business.iab.IabController;
-import com.snowball.purchase.business.iab.model.BillingPeriod;
-import com.snowball.purchase.business.iab.model.Sku;
-import com.snowball.purchase.business.iab.model.SkuListSummary;
-import com.snowball.purchase.business.license.model.DowngradeType;
-import com.snowball.purchase.business.license.model.PurchaseData;
-import com.snowball.purchase.business.license.model.PurchaseError;
-import com.snowball.purchase.business.license.model.SkuType;
+import com.snowball.core.common.SnowBallLog;
+import com.snowball.purchase.SnowBallLicenseController;
+import com.snowball.purchase.model.BillingError;
+import com.snowball.purchase.model.DowngradeType;
+import com.snowball.purchase.model.PurchaseData;
+import com.snowball.purchase.model.PurchaseError;
+import com.snowball.purchase.model.Sku;
+import com.snowball.purchase.model.SkuListSummary;
+import com.snowball.purchase.model.SkuType;
 
-import java.text.DecimalFormat;
-import java.util.Currency;
 import java.util.List;
 
 public class LicenseUpgradeActivity extends FragmentActivity implements LicenseUpgradeModel.Callback {
@@ -46,19 +43,19 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
     private final LicenseUpgradeModel mLicenseUpgradeModel = new LicenseUpgradeModel(this, this);
     private ActivityResultLauncher<Intent> mResumeLicenseActivityResultLauncher;
 
-
-    private TextView mTryForFreeTv;
+    private TextView mDiscountOfferDescTv;
     private TextView mManageSubscriptionTv;
     private SkuListAdapter mSkuListAdapter;
     private View mToPurchaseLayout;
     private View mPurchasedLayout;
-    private TextView mClaimTextView;
+    private TextView mClaimTv;
     private Button mPurchaseBtn;
-    private Sku mSelectedSku;
     private TextView mPurchasedLicenseTypeTv;
     private TextView mPurchasedExpireDateTv;
     private View mLoadingPriceView;
     private View mButtonContainer;
+
+    private Sku mSelectedSku;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +77,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
         mLoadingPriceView = findViewById(R.id.v_loading_price);
         mPurchasedLayout = findViewById(R.id.v_upgraded);
         mToPurchaseLayout = findViewById(R.id.rl_to_purchase);
-        mClaimTextView = findViewById(R.id.tv_claim);
+        mClaimTv = findViewById(R.id.tv_claim);
         mManageSubscriptionTv = findViewById(R.id.tv_manage_subscription);
         mPurchaseBtn = findViewById(R.id.btn_purchase);
         mPurchaseBtn.setOnClickListener(v -> {
@@ -88,7 +85,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
                 mLicenseUpgradeModel.startPurchasing(mSelectedSku, "default_scene");
             }
         });
-        mTryForFreeTv = findViewById(R.id.tv_free_trail_tips);
+        mDiscountOfferDescTv = findViewById(R.id.tv_discount_offer_tips);
 
         mPurchasedLicenseTypeTv = findViewById(R.id.tv_license_type);
         mPurchasedExpireDateTv = findViewById(R.id.tv_expire_date);
@@ -110,10 +107,10 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
             }
         };
         upgradeOptions.setLayoutManager(layoutManager);
-        int recyclerViewItemMargin = SnowBallUtils.dpToPx(10);
+        int recyclerViewItemMargin = Utils.dpToPx(10);
         upgradeOptions.addItemDecoration(new SkuSpaceItemDecoration(recyclerViewItemMargin));
         upgradeOptions.setAdapter(mSkuListAdapter);
-        mManageSubscriptionTv.setOnClickListener(v -> SnowBallUtils.openManageSubscriptionPage(this));
+        mManageSubscriptionTv.setOnClickListener(v -> Utils.openManageSubscriptionPage(this));
         findViewById(R.id.iv_close).setOnClickListener(v -> LicenseUpgradeActivity.this.finish());
         findViewById(R.id.tv_restore_purchase).setOnClickListener(v -> mLicenseUpgradeModel.refreshLicenseData(true));
 
@@ -141,7 +138,7 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
         mToPurchaseLayout.setVisibility(View.GONE);
         if (purchaseData.getSkuType() == SkuType.SUBS) {
             long endDate = purchaseData.getExpireTime();
-            String date = SnowBallUtils.getFormatDate(endDate);
+            String date = Utils.getFormatDate(endDate);
             mPurchasedExpireDateTv.setText(getString(R.string.expire_time, date));
             mPurchasedLicenseTypeTv.setText(getString(R.string.subscription));
             mManageSubscriptionTv.setVisibility(View.VISIBLE);
@@ -192,36 +189,27 @@ public class LicenseUpgradeActivity extends FragmentActivity implements LicenseU
             return;
         }
 
-        if (sku.getBillingPeriod().periodType == BillingPeriod.PeriodType.LIFETIME) {
-            mPurchaseBtn.setText(getString(R.string.upgrade_to_pro));
-            mTryForFreeTv.setVisibility(View.GONE);
-            mClaimTextView.setVisibility(View.VISIBLE);
-            mClaimTextView.setText(getString(R.string.purchase_claim_lifetime));
+        mPurchaseBtn.setText(getString(sku.hasFreeTrial() ? R.string.try_for_free : R.string.upgrade_to_pro));
 
+        String discountOfferText = Utils.getDiscountOfferFullText(this, sku);
+        if (!TextUtils.isEmpty(discountOfferText)) {
+            mDiscountOfferDescTv.setVisibility(View.VISIBLE);
+            mDiscountOfferDescTv.setText(discountOfferText);
         } else {
-            Sku.PriceInfo priceInfo = sku.getPriceInfo();
-            Currency currency = Currency.getInstance(priceInfo.getCurrencyCode());
-            BillingPeriod billingPeriod = sku.getBillingPeriod();
-            DecimalFormat df = new DecimalFormat("0.00");
-            String priceWithPeriod = IabStringUtil.convertToPricePerPeriod(this, billingPeriod,
-                    currency.getSymbol().toUpperCase() + df.format(priceInfo.getValue()));
-            mClaimTextView.setVisibility(View.VISIBLE);
-            if (sku.isSupportFreeTrial()) {
-                mPurchaseBtn.setText(getString(R.string.days_trial, sku.getFreeTrialDays()));
-                mTryForFreeTv.setVisibility(View.VISIBLE);
-                mTryForFreeTv.setText(getString(R.string.price_after_trial, priceWithPeriod));
-                mClaimTextView.setText(getString(R.string.purchase_claim_subs_with_free_trial, priceWithPeriod));
+            mDiscountOfferDescTv.setVisibility(View.GONE);
+        }
 
-            } else {
-                mPurchaseBtn.setText(getString(R.string.upgrade_to_pro));
-                mTryForFreeTv.setVisibility(View.GONE);
-                mClaimTextView.setText(getString(R.string.purchase_claim_subs_without_free_trial, priceWithPeriod));
-            }
+        String claimText = Utils.getClaimText(this, sku);
+        if (!TextUtils.isEmpty(claimText)) {
+            mClaimTv.setVisibility(View.VISIBLE);
+            mClaimTv.setText(claimText);
+        } else {
+            mClaimTv.setVisibility(View.GONE);
         }
     }
 
     @Override
-    public void showLoadingPriceFailed(@NonNull IabController.BillingError billingError) {
+    public void showLoadingPriceFailed(@NonNull BillingError billingError) {
         Toast.makeText(this, getString(R.string.load_price_error), Toast.LENGTH_LONG).show();
         finish();
     }
