@@ -35,8 +35,8 @@ dependencies {
     implementation libs.constraintlayout
     implementation libs.recyclerview
 
-    implementation 'com.snowballbi.sdk:core:1.1.0'
-    implementation 'com.snowballbi.sdk:purchase:1.1.0'
+    implementation 'com.snowballbi.sdk:core:1.1.1'
+    implementation 'com.snowballbi.sdk:purchase:1.1.1'
 
     implementation platform("com.google.firebase:firebase-bom:$rootProject.firebaseBomVersion")
     implementation "com.google.firebase:firebase-messaging"
