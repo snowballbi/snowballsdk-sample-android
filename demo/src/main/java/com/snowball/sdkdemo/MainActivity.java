@@ -36,10 +36,16 @@ import com.snowball.purchase.callback.ConsumePurchaseCallback;
 import com.snowball.purchase.callback.RefreshLicenseCallback;
 import com.snowball.purchase.model.BillingError;
 import com.snowball.purchase.model.LicenseChangeType;
+import com.snowball.purchase.model.LicenseChangedEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends ComponentActivity {
     private static final SnowBallLog gDebug = SnowBallLog.createCommonLogger("MainActivity");
     private TextView mTextViewPushToken;
+    private TextView mTextViewLicenseStatus;
     private Button mEnableFrcTestModeButton;
     private Button mDisbaleFrcTestModeButton;
 
@@ -68,6 +74,8 @@ public class MainActivity extends ComponentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -90,6 +98,7 @@ public class MainActivity extends ComponentActivity {
     @Override
     protected void onDestroy() {
         FrcHelper.removeCallback(mFrcCallback);
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -100,6 +109,8 @@ public class MainActivity extends ComponentActivity {
             public void onRefreshLicenseSuccess(@NonNull String skuGroup, @NonNull LicenseChangeType licenseChangeType, @Nullable String pausedSkuId) {
                 if (licenseChangeType.isDowngrade()) {
                     Toast.makeText(MainActivity.this, getString(R.string.license_downgraded), Toast.LENGTH_LONG).show();
+                } else if (licenseChangeType.isUpgrade()) {
+                    Toast.makeText(MainActivity.this, getString(R.string.license_upgraded), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -120,6 +131,7 @@ public class MainActivity extends ComponentActivity {
         });
 
         mTextViewPushToken = findViewById(R.id.user_push_token_text_view);
+        mTextViewLicenseStatus = findViewById(R.id.license_status_textview);
 
         Button btnCopyPushToken = findViewById(R.id.btn_copy_push_token);
         btnCopyPushToken.setOnClickListener((v) -> {
@@ -170,6 +182,12 @@ public class MainActivity extends ComponentActivity {
         queryFirebasePushToken(false);
 
         queryFirebaseRemoteConfigId();
+
+        refreshLicenseTextView();
+    }
+
+    private void refreshLicenseTextView() {
+        mTextViewLicenseStatus.setText("License Status: " + (SnowBallLicenseController.getInstance().isProLicense() ? "Pro" : "Free"));
     }
 
     private void refreshTestModeButtonStatus() {
@@ -282,5 +300,11 @@ public class MainActivity extends ComponentActivity {
         } else {
             Log.d("TAG", "The interstitial ad wasn't ready yet.");
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLicenseChange(LicenseChangedEvent licenseChangedEvent) {
+        refreshLicenseTextView();
+        gDebug.d("onLicenseChange, isPro:" + SnowBallLicenseController.getInstance().isProLicense());
     }
 }

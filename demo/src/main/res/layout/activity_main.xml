@@ -88,6 +88,12 @@
         android:orientation="vertical"
         android:layout_margin="10dp">
         <TextView
+            android:id="@+id/license_status_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"/>
+        <TextView
             android:id="@+id/frc_version_id_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
